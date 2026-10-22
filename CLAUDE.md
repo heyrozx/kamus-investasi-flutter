@@ -127,7 +127,8 @@ migrate.
 
 ### Branding assets
 
-- `assets/images/logo.png` — master logo, 1024px, gradient V on transparent background.
+- `assets/images/logo.png` — master logo, 1024px, gradient V on transparent background. Keeps
+  the original icon's padding (V spans ~62% of the width); icons derive from it without re-cropping.
 - `assets/icon/` — launcher icon sources: `launcher_icon.png` (legacy, white background),
   `launcher_foreground.png` (adaptive foreground, padding baked in, inset 0),
   `launcher_monochrome.png` (Android 13 themed icon).

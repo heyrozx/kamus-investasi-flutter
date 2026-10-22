@@ -8,6 +8,7 @@
 * Menghapus package yang tidak dipakai: `infinite_scroll_pagination`, `cupertino_icons`,
   `change_app_package_name`
 * Logo baru: background transparan dan huruf V bergradien biru
+* Padding logo dan launcher icon disamakan dengan logo sebelumnya
 * Launcher icon baru memakai logo terbaru, termasuk adaptive icon dan themed (monochrome) icon
 * Menambahkan ikon Play Store 512x512 di `store/play_store_icon_512.png`
 * Mengganti `getCurrentOrientationAnchoredAdaptiveBannerAdSize` (deprecated) dengan
