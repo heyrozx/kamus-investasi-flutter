@@ -3,34 +3,33 @@ description: Kamus Investasi.
 
 publish_to: 'none'
 
-version: 1.0.9+11
+version: 1.1.0+12
 
 environment:
-  sdk: ">=3.10.3 <4.0.0"
+  sdk: ">=3.13.0 <4.0.0"
+  flutter: ">=3.47.0"
 
 dependencies:
   flutter:
     sdk: flutter
-  upgrader: ^12.5.0
+  upgrader: ^13.7.0
   iconsax: ^0.0.8
-  google_fonts: ^8.0.2
-  sqflite: ^2.3.0
-  intl: ^0.20.2
-  fluttertoast: ^9.0.0
-  path_provider: ^2.1.2
-  infinite_scroll_pagination: ^5.1.1
+  google_fonts: ^9.0.0
+  sqflite: ^2.4.5
+  intl: ^0.20.3
+  fluttertoast: ^10.0.2
+  path_provider: ^2.1.6
   infinite_scroll: ^1.1.1
-  share_plus: ^12.0.1
-  google_mobile_ads: ^7.0.0
-  url_launcher: ^6.1.5
-
-  cupertino_icons: ^1.0.2
+  share_plus: ^13.3.1
+  google_mobile_ads: ^9.2.0
+  url_launcher: ^6.3.3
+  material_ui: ^1.8.0
+  path: ^1.9.1
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^6.0.0
-  change_app_package_name: ^1.5.0
   flutter_launcher_icons: ^0.14.4
 
 # The following section is specific to Flutter packages.
@@ -43,4 +42,3 @@ flutter:
     - assets/images/bookmark.png
     - assets/images/history.png
     - assets/images/feedback.png
-    - assets/images/launcher_icon.jpg

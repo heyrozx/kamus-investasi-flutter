@@ -4,7 +4,7 @@ Guidance for Claude Code when working in this repository.
 
 ## Project
 
-**Kamus Investasi** — an offline Indonesian investment-terms dictionary (Flutter, Android + iOS).
+**Kamus Investasi** — an offline Indonesian investment-terms dictionary (Flutter, Android only — the iOS platform was removed in 1.1.0).
 Package/bundle id: `com.caraguna.kamus.investasi`. Monetised with AdMob banner ads.
 All 593 dictionary entries ship in the app bundle; there is no backend and no network API.
 
@@ -30,7 +30,7 @@ flutter analyze                 # lints: flutter_lints via analysis_options.yaml
 flutter test
 flutter build appbundle --release   # Play Store artifact
 flutter build apk --release
-dart run flutter_launcher_icons      # regenerate icons after changing launcher_icon.jpg
+dart run flutter_launcher_icons      # regenerate icons after changing assets/icon/*.png
 ```
 
 ## Build configuration
@@ -56,14 +56,18 @@ done
 
 Prefer replacing the dead plugin over forcing `compileSdk` on subprojects from the root Gradle file.
 
-Toolchain (bump these together; Flutter 3.44 warns below Gradle 8.14 / AGP 8.11.1 / Kotlin 2.2.20):
+Toolchain (bump these together; these match the `flutter create` template of Flutter 3.47):
 
 | Component | Version | File |
 | --- | --- | --- |
-| Gradle | 8.14.3 | [android/gradle/wrapper/gradle-wrapper.properties](android/gradle/wrapper/gradle-wrapper.properties) |
-| Android Gradle Plugin | 8.13.0 | [android/settings.gradle.kts](android/settings.gradle.kts) |
-| Kotlin | 2.2.20 | [android/settings.gradle.kts](android/settings.gradle.kts) |
+| Gradle | 9.3.1 | [android/gradle/wrapper/gradle-wrapper.properties](android/gradle/wrapper/gradle-wrapper.properties) |
+| Android Gradle Plugin | 9.1.0 | [android/settings.gradle.kts](android/settings.gradle.kts) |
+| Kotlin | 2.4.0 | [android/settings.gradle.kts](android/settings.gradle.kts) |
 | Java / JVM target | 17 | [android/app/build.gradle.kts](android/app/build.gradle.kts) |
+
+AGP 9 runs with `android.builtInKotlin=false` and `android.newDsl=false` in
+[android/gradle.properties](android/gradle.properties) (Flutter template defaults). The app module
+does not apply `kotlin-android` itself — the Flutter Gradle Plugin applies it.
 
 Release builds require `android/key.properties` (git-ignored) with `keyAlias`, `keyPassword`,
 `storeFile`, `storePassword`. Without it the Gradle config throws on the `as String` casts —
@@ -112,6 +116,23 @@ to resolve AdMob "Resizing Ad Frames" policy warnings (see changelog 1.0.7/1.0.8
 `AdWidget` in anything that stretches or scales it.
 
 The AdMob app id lives in [android/app/src/main/AndroidManifest.xml](android/app/src/main/AndroidManifest.xml).
+
+### Material UI package
+
+Flutter 3.47 moved Material out of the framework into the `material_ui` package. App code imports
+`package:material_ui/material_ui.dart`, not `package:flutter/material.dart`. `upgrader`,
+`fluttertoast` and `infinite_scroll` still use the old library, so `MaterialApp.builder` wraps the
+tree in `MaterialUiCompatibilityBridge` (deprecated, migration-only). Drop it once those packages
+migrate.
+
+### Branding assets
+
+- `assets/images/logo.png` — master logo, 1024px, gradient V on transparent background. Keeps
+  the original icon's padding (V spans ~62% of the width); icons derive from it without re-cropping.
+- `assets/icon/` — launcher icon sources: `launcher_icon.png` (legacy, white background),
+  `launcher_foreground.png` (adaptive foreground, padding baked in, inset 0),
+  `launcher_monochrome.png` (Android 13 themed icon).
+- `store/play_store_icon_512.png` — Play Console listing icon (not bundled in the app).
 
 ## Conventions
 
