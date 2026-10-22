@@ -13,6 +13,14 @@
 * Menambahkan ikon Play Store 512x512 di `store/play_store_icon_512.png`
 * Mengganti `getCurrentOrientationAnchoredAdaptiveBannerAdSize` (deprecated) dengan
   `getLargeAnchoredAdaptiveBannerAdSize`
+* Data kamus sekarang dikirim sebagai database SQLite siap pakai (`assets/db/dictionary.db`),
+  sehingga pembukaan pertama aplikasi tidak lagi mem-parsing JSON dan meng-insert 593 baris
+* Data kamus dan data pengguna (bookmark, riwayat) dipisah ke file database berbeda; update data
+  kamus tidak lagi menyentuh bookmark dan riwayat
+* Migrasi database pengguna ke versi 2: tabel kamus lama dihapus, bookmark dan riwayat tetap utuh
+* Menambahkan generator `tool/dictionary_db` dan VS Code task "Generate dictionary.db" untuk
+  membuat ulang database dari `assets/datasets/dictionaries.json`
+* Menambahkan index pada kolom `alphabet` dan `category`
 
 ## 1.0.9 (11)
 

@@ -2,10 +2,10 @@ import 'package:material_ui/material_ui.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:kamus_investasi/databases/database_instance.dart';
 import 'package:kamus_investasi/pages/bookmark.dart';
 import 'package:kamus_investasi/pages/history.dart';
 import 'package:kamus_investasi/pages/home.dart';
-import 'package:kamus_investasi/utils/datasets.dart';
 import 'package:upgrader/upgrader.dart';
 
 void main() async {
@@ -61,11 +61,11 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
+  // Opens the database, copying the bundled dictionary on first launch.
   Future setupDatasets() async {
-    DataSets dataSets = DataSets();
-    bool result = await dataSets.initDictionaries();
+    await DatabaseInstance().database;
     setState(() {
-      isInitializeDatasets = result;
+      isInitializeDatasets = false;
     });
   }
 

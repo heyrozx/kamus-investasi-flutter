@@ -6,11 +6,6 @@ class DictionaryRepository {
   // reference to our single class that manages the database
   final dbInstance = DatabaseInstance();
 
-  Future<int> insert(Map<String, dynamic> row) async {
-    Database db = await dbInstance.database;
-    return await db.insert(dbInstance.dictionaryTable, row);
-  }
-
   Future<List<DictionaryModel>> getAllDictionaryAlphabets(
       {String? alphabet}) async {
     Database db = await dbInstance.database;
@@ -144,10 +139,5 @@ class DictionaryRepository {
       return DictionaryModel.fromJson(data[0]);
     }
     return null;
-  }
-
-  Future<int> deleteAll() async {
-    Database db = await dbInstance.database;
-    return await db.delete(dbInstance.dictionaryTable);
   }
 }

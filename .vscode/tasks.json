@@ -1,0 +1,25 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Generate dictionary.db",
+      "detail": "assets/datasets/dictionaries.json -> assets/db/dictionary.db",
+      "type": "shell",
+      "command": "dart",
+      "args": ["run", "bin/build_dictionary_db.dart"],
+      "options": { "cwd": "${workspaceFolder}/tool/dictionary_db" },
+      "dependsOn": "dictionary_db: pub get",
+      "group": "build",
+      "problemMatcher": []
+    },
+    {
+      "label": "dictionary_db: pub get",
+      "type": "shell",
+      "command": "dart",
+      "args": ["pub", "get"],
+      "options": { "cwd": "${workspaceFolder}/tool/dictionary_db" },
+      "hide": true,
+      "problemMatcher": []
+    }
+  ]
+}

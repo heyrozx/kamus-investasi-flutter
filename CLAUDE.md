@@ -81,30 +81,49 @@ plus `setState`, and repositories instantiated directly inside widgets.
 ```
 lib/
   main.dart          MaterialApp + BottomNavigationBar shell (Home / Bookmark / Riwayat).
-                     Seeds the DB on startup and gates the UI behind a loading screen.
+                     Opens the DB on startup and gates the UI behind a loading screen.
   pages/             One screen per file. Feedback page exists but is commented out of the shell.
   models/            Plain classes with `fromJson`; snake_case DB columns → camelCase fields.
   databases/
-    database_instance.dart      sqflite schema + column-name constants (tables: dictionaries,
-                                bookmarks, histories). Schema version 1.
+    database_instance.dart      sqflite setup + column-name constants. Schema version 2.
+    dictionaries/dictionary_db_version.dart   GENERATED — version of the bundled dictionary.db.
     <table>/<table>_repository.dart   All SQL lives here, written as raw query strings.
-  utils/             datasets.dart (asset → DB seeding), json_configuration.dart, date_instance.dart
+  utils/             date_instance.dart
   shared/widgets/    banner_ad_widget.dart
-assets/datasets/dictionaries.json    593 entries, the seed data
+assets/datasets/dictionaries.json    593 entries — the source data (not bundled in the app)
+assets/db/dictionary.db              GENERATED prebuilt SQLite database (bundled)
+tool/dictionary_db/                  Standalone Dart package that generates the two files above
 ```
+
+### Dictionary data
+
+The dictionary ships as a prebuilt SQLite file; nothing is parsed or inserted at runtime.
+
+- **Edit `assets/datasets/dictionaries.json`, then regenerate** with the VS Code task
+  *Generate dictionary.db* (`.vscode/tasks.json`) or
+  `cd tool/dictionary_db && dart pub get && dart run bin/build_dictionary_db.dart`.
+  Commit both `assets/db/dictionary.db` and `dictionary_db_version.dart`.
+- Two database files on device: `dictionary.db` (read-only, replaceable) and
+  `kamus_investasi.db` (bookmarks, histories — user data). The user DB `ATTACH`es the dictionary
+  as `dictionary_db` in `onOpen`, so the repositories' unqualified `dictionaries` and the JOINs
+  against bookmarks/histories work unchanged. Never create a `dictionaries` table in the user DB:
+  it would shadow the attached one.
+- `dictionaryDbVersion` is a hash of the JSON (plus `schemaRevision` in the generator) and is
+  written to the file's `PRAGMA user_version`. On startup `DatabaseInstance` re-copies the asset
+  whenever the installed file's `user_version` differs — no manual version bump needed. Bump
+  `schemaRevision` when the generator's table layout changes.
+- **ids are the JSON order (1..n)**, matching what the pre-1.1.0 runtime seeding assigned.
+  Bookmarks and histories store `dictionary_id`, so only append entries to the JSON; reordering
+  or deleting entries silently repoints users' bookmarks.
+- Schema v1 → v2 (`onUpgrade`) drops the old runtime-seeded `dictionaries` table from the user DB.
+- `DatabaseInstance` caches one app-wide connection future in a static field; repositories still
+  construct their own `DatabaseInstance` but share it.
 
 ### Data flow gotchas
 
-- **Seeding is count-based.** `DataSets.initDictionaries()` compares the row count against the
-  hard-coded literal `593`; if it differs it wipes and re-inserts every row. **If you add or remove
-  entries in `assets/datasets/dictionaries.json`, you must update that literal in
-  [lib/utils/datasets.dart](lib/utils/datasets.dart)** or the new data will never be picked up.
-- `initDictionaries()` returns `false` on both branches; `main.dart` treats `false` as "ready".
 - Repositories build SQL by string interpolation. When touching a query, keep the existing
   `dbInstance.*` column constants — column names are not literals anywhere else.
-- `DatabaseInstance` is constructed per repository, but sqflite caches the open handle by path,
-  so this is effectively a shared connection. Schema changes need a `_databaseVersion` bump and an
-  `onUpgrade` handler — there is none today, so existing installs would keep the old schema.
+- Schema changes to the user DB need a `_databaseVersion` bump and an `onUpgrade` step.
 
 ### Ads
 
