@@ -1,6 +1,6 @@
 // ignore_for_file: use_build_context_synchronously
 
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:infinite_scroll/infinite_scroll.dart';
 import 'package:kamus_investasi/databases/bookmarks/bookmark_repository.dart';

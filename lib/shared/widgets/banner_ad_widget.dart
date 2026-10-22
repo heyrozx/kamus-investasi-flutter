@@ -1,5 +1,5 @@
 import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 
 enum StatusAd { initial, loaded }
@@ -45,7 +45,7 @@ class _BannerAdWidgetState extends State<BannerAdWidget> {
   }
 
   Future<void> initBanner() async {
-    final size = await AdSize.getCurrentOrientationAnchoredAdaptiveBannerAdSize(
+    final size = await AdSize.getLargeAnchoredAdaptiveBannerAdSize(
       MediaQuery.of(context).size.width.toInt(),
     );
 
