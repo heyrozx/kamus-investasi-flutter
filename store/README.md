@@ -4,10 +4,11 @@
 | --- | --- | --- |
 | `icon_512.png` | Listing toko → Ikon aplikasi | 512×512 PNG |
 | `feature_graphic_1024x500.png` | Listing toko → Grafis fitur | 1024×500 PNG, tanpa transparansi |
-| `screenshots/01_istilah.png` … `06_history.png` | Listing toko → Screenshot ponsel (urut sesuai nomor) | 1080×1920 PNG (9:16) |
+| `screenshots/01_istilah.png` … `07_history.png` | Listing toko → Screenshot ponsel (urut sesuai nomor) | 1080×1920 PNG (9:16) |
 
 Screenshot dirender dari UI aplikasi yang asli (data kamus versi saat ini), lalu dipasang di mockup
-ponsel. Angka "1.000+" merujuk ke jumlah istilah di `assets/datasets/dictionaries.json`.
+ponsel. Screenshot 01 memakai dua mockup bertumpuk dengan badge "100% Offline"; 02 menonjolkan
+fitur offline (status bar mode pesawat). Navbar bawah sengaja dipotong. Angka "1.000+" merujuk ke jumlah istilah di `assets/datasets/dictionaries.json`.
 
 ## Teks listing (saran)
 

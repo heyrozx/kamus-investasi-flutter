@@ -26,7 +26,7 @@
   `?`; sebelumnya pencarian bisa error jika kata kunci mengandung tanda kutip, dan query gagal
   di versi SQLite yang tidak lagi menerima kutip ganda sebagai teks
 * Menambahkan aset Play Console di folder `store/`: ikon 512, feature graphic 1024x500, dan
-  6 screenshot ponsel
+  7 screenshot ponsel dengan mockup realistis, termasuk highlight "1.000+" dan fitur offline
 
 ## 1.0.9 (11)
 

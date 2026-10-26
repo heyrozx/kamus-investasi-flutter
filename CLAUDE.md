@@ -155,7 +155,8 @@ migrate.
   `launcher_monochrome.png` (Android 13 themed icon).
 - `store/` — Play Console assets (not bundled): `icon_512.png`, `feature_graphic_1024x500.png`,
   `screenshots/` (1080×1920, rendered from the real UI). See `store/README.md`. The hero
-  screenshot and feature graphic say "1.000+" — keep that true if entries are ever removed.
+  screenshot and feature graphic say "1.000+" and "100% Offline" — keep both true (no
+  network-only features, entries never drop below 1,000).
 
 ## Conventions
 
