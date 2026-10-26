@@ -4,6 +4,9 @@
   androidx.work.impl.WorkDatabase`): R8 menghapus constructor database WorkManager yang dipakai
   AdMob. WorkManager di-upgrade ke 2.12.0 dan ditambahkan aturan keep di
   `android/app/proguard-rules.pro`
+* Upgrade dependency ke versi terbaru: Material Components Android 1.14.0, dependency transitive
+  (`crypto` 3.0.8, `shared_preferences_android` 2.5.3), dan paket generator `tool/dictionary_db`
+  (`sqlite3` 3.8.0, `crypto` 3.0.8)
 
 ## 1.1.0 (12)
 

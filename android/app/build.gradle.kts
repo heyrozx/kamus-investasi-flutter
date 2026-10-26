@@ -67,7 +67,7 @@ flutter {
 }
 
 dependencies {
-    implementation("com.google.android.material:material:1.13.0")
+    implementation("com.google.android.material:material:1.14.0")
     // play-services-ads pulls work-runtime 2.7.0 (Room 2.2.5), whose R8 rules don't keep
     // WorkDatabase_Impl's constructor; release builds then crash at startup. 2.12 brings
     // Room 2.7 with correct rules. See also proguard-rules.pro.
