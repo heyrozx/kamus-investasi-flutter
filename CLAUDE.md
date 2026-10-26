@@ -56,6 +56,15 @@ done
 
 Prefer replacing the dead plugin over forcing `compileSdk` on subprojects from the root Gradle file.
 
+**R8 + old Room = startup crash.** Release builds are minified with R8 full mode. `play-services-ads`
+depends on `androidx.work:work-runtime:2.7.0` (Room 2.2.5), whose keep rules don't preserve
+`WorkDatabase_Impl`'s no-arg constructor; 1.1.0 crashed on launch with *"Failed to create an
+instance of androidx.work.impl.WorkDatabase"* from `androidx.startup.InitializationProvider`.
+The app pins `work-runtime` 2.12.0 in `android/app/build.gradle.kts` and keeps `RoomDatabase`
+constructors in [android/app/proguard-rules.pro](android/app/proguard-rules.pro) (Flutter picks
+that file up automatically). Keep both; debug builds never show this, so test a **release** build
+on a device before uploading.
+
 Toolchain (bump these together; these match the `flutter create` template of Flutter 3.47):
 
 | Component | Version | File |

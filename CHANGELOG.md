@@ -1,3 +1,10 @@
+## 1.1.1 (13)
+
+* Memperbaiki crash saat aplikasi dibuka di build release (`Failed to create an instance of
+  androidx.work.impl.WorkDatabase`): R8 menghapus constructor database WorkManager yang dipakai
+  AdMob. WorkManager di-upgrade ke 2.12.0 dan ditambahkan aturan keep di
+  `android/app/proguard-rules.pro`
+
 ## 1.1.0 (12)
 
 * Upgrade ke Flutter 3.47 / Dart 3.13 dan semua dependency ke versi terbaru (`google_mobile_ads` 9,
