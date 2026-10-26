@@ -13,6 +13,15 @@
       "problemMatcher": []
     },
     {
+      "label": "Build appbundle (release)",
+      "detail": "flutter build appbundle --release -> build/app/outputs/bundle/release/app-release.aab",
+      "type": "shell",
+      "command": "flutter",
+      "args": ["build", "appbundle", "--release"],
+      "group": "build",
+      "problemMatcher": []
+    },
+    {
       "label": "dictionary_db: pub get",
       "type": "shell",
       "command": "dart",

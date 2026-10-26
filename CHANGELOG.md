@@ -20,6 +20,9 @@
 * Migrasi database pengguna ke versi 2: tabel kamus lama dihapus, bookmark dan riwayat tetap utuh
 * Menambahkan generator `tool/dictionary_db` dan VS Code task "Generate dictionary.db" untuk
   membuat ulang database dari `assets/datasets/dictionaries.json`
+* Menambahkan VS Code task "Build appbundle (release)" untuk `flutter build appbundle --release`
+* Analyzer mengabaikan folder platform yang tidak dipakai (`ios`, `web`, `windows`, `macos`,
+  `linux`)
 * Menambahkan index pada kolom `alphabet` dan `category`
 * Menambah 425 istilah baru, total kamus sekarang 1.018 istilah
 * Memperbaiki query SQL yang memakai kutip ganda untuk teks (`alphabet="A"`) menjadi parameter
