@@ -10,7 +10,7 @@
 * Logo baru: background transparan dan huruf V bergradien biru
 * Padding logo dan launcher icon disamakan dengan logo sebelumnya
 * Launcher icon baru memakai logo terbaru, termasuk adaptive icon dan themed (monochrome) icon
-* Menambahkan ikon Play Store 512x512 di `store/play_store_icon_512.png`
+* Menambahkan ikon Play Store 512x512 di `store/icon_512.png`
 * Mengganti `getCurrentOrientationAnchoredAdaptiveBannerAdSize` (deprecated) dengan
   `getLargeAnchoredAdaptiveBannerAdSize`
 * Data kamus sekarang dikirim sebagai database SQLite siap pakai (`assets/db/dictionary.db`),
@@ -21,6 +21,12 @@
 * Menambahkan generator `tool/dictionary_db` dan VS Code task "Generate dictionary.db" untuk
   membuat ulang database dari `assets/datasets/dictionaries.json`
 * Menambahkan index pada kolom `alphabet` dan `category`
+* Menambah 425 istilah baru, total kamus sekarang 1.018 istilah
+* Memperbaiki query SQL yang memakai kutip ganda untuk teks (`alphabet="A"`) menjadi parameter
+  `?`; sebelumnya pencarian bisa error jika kata kunci mengandung tanda kutip, dan query gagal
+  di versi SQLite yang tidak lagi menerima kutip ganda sebagai teks
+* Menambahkan aset Play Console di folder `store/`: ikon 512, feature graphic 1024x500, dan
+  6 screenshot ponsel
 
 ## 1.0.9 (11)
 

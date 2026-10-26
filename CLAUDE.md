@@ -6,7 +6,7 @@ Guidance for Claude Code when working in this repository.
 
 **Kamus Investasi** — an offline Indonesian investment-terms dictionary (Flutter, Android only — the iOS platform was removed in 1.1.0).
 Package/bundle id: `com.caraguna.kamus.investasi`. Monetised with AdMob banner ads.
-All 593 dictionary entries ship in the app bundle; there is no backend and no network API.
+All 1,018 dictionary entries ship in the app bundle; there is no backend and no network API.
 
 ## Always update the changelog
 
@@ -90,7 +90,7 @@ lib/
     <table>/<table>_repository.dart   All SQL lives here, written as raw query strings.
   utils/             date_instance.dart
   shared/widgets/    banner_ad_widget.dart
-assets/datasets/dictionaries.json    593 entries — the source data (not bundled in the app)
+assets/datasets/dictionaries.json    1,018 entries — the source data (not bundled in the app)
 assets/db/dictionary.db              GENERATED prebuilt SQLite database (bundled)
 tool/dictionary_db/                  Standalone Dart package that generates the two files above
 ```
@@ -121,8 +121,10 @@ The dictionary ships as a prebuilt SQLite file; nothing is parsed or inserted at
 
 ### Data flow gotchas
 
-- Repositories build SQL by string interpolation. When touching a query, keep the existing
-  `dbInstance.*` column constants — column names are not literals anywhere else.
+- Repositories build SQL by string interpolation for identifiers. When touching a query, keep the
+  existing `dbInstance.*` column constants — column names are not literals anywhere else.
+- Values go in as `?` arguments, never interpolated. Never write string literals in double
+  quotes (`col="x"`): SQLite builds without the legacy DQS quirk treat them as identifiers.
 - Schema changes to the user DB need a `_databaseVersion` bump and an `onUpgrade` step.
 
 ### Ads
@@ -151,7 +153,9 @@ migrate.
 - `assets/icon/` — launcher icon sources: `launcher_icon.png` (legacy, white background),
   `launcher_foreground.png` (adaptive foreground, padding baked in, inset 0),
   `launcher_monochrome.png` (Android 13 themed icon).
-- `store/play_store_icon_512.png` — Play Console listing icon (not bundled in the app).
+- `store/` — Play Console assets (not bundled): `icon_512.png`, `feature_graphic_1024x500.png`,
+  `screenshots/` (1080×1920, rendered from the real UI). See `store/README.md`. The hero
+  screenshot and feature graphic say "1.000+" — keep that true if entries are ever removed.
 
 ## Conventions
 
