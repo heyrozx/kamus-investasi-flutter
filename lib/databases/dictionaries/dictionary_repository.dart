@@ -10,8 +10,8 @@ class DictionaryRepository {
       {String? alphabet}) async {
     Database db = await dbInstance.database;
     final data = await db.rawQuery(
-        'SELECT ${dbInstance.dictionaryTable}.* FROM ${dbInstance.dictionaryTable} WHERE ${dbInstance.dictionaryTable}.${dbInstance.dictionaryAlphabet}="$alphabet" ORDER BY upper(${dbInstance.dictionaryTable}.${dbInstance.dictionaryTitle}) ASC',
-        []);
+        'SELECT ${dbInstance.dictionaryTable}.* FROM ${dbInstance.dictionaryTable} WHERE ${dbInstance.dictionaryTable}.${dbInstance.dictionaryAlphabet}=? ORDER BY upper(${dbInstance.dictionaryTable}.${dbInstance.dictionaryTitle}) ASC',
+        [alphabet]);
 
     List<DictionaryModel> listDictionaries = [];
     if (data.isNotEmpty) {
@@ -37,8 +37,8 @@ class DictionaryRepository {
       {String? alphabet, String? q}) async {
     Database db = await dbInstance.database;
     final data = await db.rawQuery(
-        'SELECT ${dbInstance.dictionaryTable}.* FROM ${dbInstance.dictionaryTable} WHERE ${dbInstance.dictionaryTable}.${dbInstance.dictionaryAlphabet}="$alphabet" AND (${dbInstance.dictionaryTable}.${dbInstance.dictionaryTitle} LIKE "%$q%" OR ${dbInstance.dictionaryTable}.${dbInstance.dictionaryFullTitle} LIKE "%$q%") ORDER BY upper(${dbInstance.dictionaryTable}.${dbInstance.dictionaryTitle}) ASC LIMIT 5',
-        []);
+        'SELECT ${dbInstance.dictionaryTable}.* FROM ${dbInstance.dictionaryTable} WHERE ${dbInstance.dictionaryTable}.${dbInstance.dictionaryAlphabet}=? AND (${dbInstance.dictionaryTable}.${dbInstance.dictionaryTitle} LIKE ? OR ${dbInstance.dictionaryTable}.${dbInstance.dictionaryFullTitle} LIKE ?) ORDER BY upper(${dbInstance.dictionaryTable}.${dbInstance.dictionaryTitle}) ASC LIMIT 5',
+        [alphabet, '%$q%', '%$q%']);
 
     List<DictionaryModel> listDictionaries = [];
     if (data.isNotEmpty) {
@@ -69,8 +69,8 @@ class DictionaryRepository {
 
     Database db = await dbInstance.database;
     final data = await db.rawQuery(
-        'SELECT ${dbInstance.dictionaryTable}.alphabet  FROM ${dbInstance.dictionaryTable} WHERE ${dbInstance.dictionaryTable}.${dbInstance.dictionaryTitle} LIKE "%$q%" OR ${dbInstance.dictionaryTable}.${dbInstance.dictionaryFullTitle} LIKE "%$q%" GROUP BY ${dbInstance.dictionaryTable}.${dbInstance.dictionaryAlphabet} ORDER BY ${dbInstance.dictionaryTable}.${dbInstance.dictionaryTitle} ASC LIMIT $limit OFFSET $offset',
-        []);
+        'SELECT ${dbInstance.dictionaryTable}.alphabet  FROM ${dbInstance.dictionaryTable} WHERE ${dbInstance.dictionaryTable}.${dbInstance.dictionaryTitle} LIKE ? OR ${dbInstance.dictionaryTable}.${dbInstance.dictionaryFullTitle} LIKE ? GROUP BY ${dbInstance.dictionaryTable}.${dbInstance.dictionaryAlphabet} ORDER BY ${dbInstance.dictionaryTable}.${dbInstance.dictionaryTitle} ASC LIMIT $limit OFFSET $offset',
+        ['%$q%', '%$q%']);
 
     List<DictionaryByAlphabets> listDictionaryAlphabets = [];
     if (data.isNotEmpty) {
@@ -90,8 +90,8 @@ class DictionaryRepository {
   Future<List<DictionaryModel>>? related(String category) async {
     Database db = await dbInstance.database;
     final data = await db.rawQuery(
-        'SELECT * FROM ${dbInstance.dictionaryTable} WHERE ${dbInstance.dictionaryTable}.${dbInstance.dictionaryCategory} = "$category" order by random() LIMIT 8',
-        []);
+        'SELECT * FROM ${dbInstance.dictionaryTable} WHERE ${dbInstance.dictionaryTable}.${dbInstance.dictionaryCategory} = ? order by random() LIMIT 8',
+        [category]);
     // print(data);
 
     List<DictionaryModel> listDictionaries = [];

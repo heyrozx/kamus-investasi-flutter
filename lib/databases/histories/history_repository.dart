@@ -16,8 +16,8 @@ class HistoryRepository {
   Future<List<DictionaryModel>> getDictionaryDates({String? date}) async {
     Database db = await dbInstance.database;
     final data = await db.rawQuery(
-        'SELECT ${dbInstance.dictionaryTable}.* FROM ${dbInstance.dictionaryTable} JOIN ${dbInstance.historyTable} ON ${dbInstance.dictionaryTable}.${dbInstance.dictionaryId}=${dbInstance.historyTable}.${dbInstance.historyDictionaryId} WHERE ${dbInstance.historyTable}.${dbInstance.historyCreatedAt}="$date" ORDER BY ${dbInstance.historyTable}.${dbInstance.historyUpdatedAt} DESC',
-        []);
+        'SELECT ${dbInstance.dictionaryTable}.* FROM ${dbInstance.dictionaryTable} JOIN ${dbInstance.historyTable} ON ${dbInstance.dictionaryTable}.${dbInstance.dictionaryId}=${dbInstance.historyTable}.${dbInstance.historyDictionaryId} WHERE ${dbInstance.historyTable}.${dbInstance.historyCreatedAt}=? ORDER BY ${dbInstance.historyTable}.${dbInstance.historyUpdatedAt} DESC',
+        [date]);
 
     List<DictionaryModel> listDictionaries = [];
     if (data.isNotEmpty) {
@@ -67,8 +67,8 @@ class HistoryRepository {
     Database db = await dbInstance.database;
     String dateNow = DateInstance.commonDate();
     final data = await db.rawQuery(
-        'SELECT * FROM ${dbInstance.historyTable} WHERE ${dbInstance.historyTable}.${dbInstance.historyDictionaryId}=$id AND ${dbInstance.historyTable}.${dbInstance.historyCreatedAt}="$dateNow" ORDER BY ${dbInstance.historyTable}.${dbInstance.historyCreatedAt} DESC LIMIT 1',
-        []);
+        'SELECT * FROM ${dbInstance.historyTable} WHERE ${dbInstance.historyTable}.${dbInstance.historyDictionaryId}=$id AND ${dbInstance.historyTable}.${dbInstance.historyCreatedAt}=? ORDER BY ${dbInstance.historyTable}.${dbInstance.historyCreatedAt} DESC LIMIT 1',
+        [dateNow]);
     // print(data);
     if (data.isNotEmpty) {
       return HistoryModel.fromJson(data[0]);
