@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
@@ -23,9 +24,7 @@ class MyApp extends StatelessWidget {
       title: 'Kamus Indonesia',
       theme: ThemeData(
         useMaterial3: false,
-        textTheme: GoogleFonts.ralewayTextTheme(
-          Theme.of(context).textTheme,
-        ),
+        textTheme: GoogleFonts.ralewayTextTheme(Theme.of(context).textTheme),
       ),
       debugShowCheckedModeBanner: false,
       // upgrader, fluttertoast and infinite_scroll still build on
@@ -54,6 +53,7 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   int _selectedIndex = 0;
   bool isInitializeDatasets = true;
+  bool isInitializeFailed = false;
 
   void _onItemTapped(int index) {
     setState(() {
@@ -63,10 +63,27 @@ class _MyHomePageState extends State<MyHomePage> {
 
   // Opens the database, copying the bundled dictionary on first launch.
   Future setupDatasets() async {
-    await DatabaseInstance().database;
+    try {
+      await DatabaseInstance().database;
+    } catch (e) {
+      if (kDebugMode) print('--- Failed to open database: $e');
+      if (!mounted) return;
+      setState(() {
+        isInitializeFailed = true;
+      });
+      return;
+    }
+    if (!mounted) return;
     setState(() {
       isInitializeDatasets = false;
     });
+  }
+
+  void _retrySetupDatasets() {
+    setState(() {
+      isInitializeFailed = false;
+    });
+    setupDatasets();
   }
 
   static const List<Widget> _widgetOptions = <Widget>[
@@ -97,20 +114,23 @@ class _MyHomePageState extends State<MyHomePage> {
               items: <BottomNavigationBarItem>[
                 BottomNavigationBarItem(
                   icon: Container(
-                      margin: const EdgeInsets.only(bottom: 3, top: 10),
-                      child: const Icon(Iconsax.home)),
+                    margin: const EdgeInsets.only(bottom: 3, top: 10),
+                    child: const Icon(Iconsax.home),
+                  ),
                   label: 'Home',
                 ),
                 BottomNavigationBarItem(
                   icon: Container(
-                      margin: const EdgeInsets.only(bottom: 3, top: 10),
-                      child: const Icon(Iconsax.bookmark)),
+                    margin: const EdgeInsets.only(bottom: 3, top: 10),
+                    child: const Icon(Iconsax.bookmark),
+                  ),
                   label: 'Bookmark',
                 ),
                 BottomNavigationBarItem(
                   icon: Container(
-                      margin: const EdgeInsets.only(bottom: 3, top: 10),
-                      child: const Icon(Iconsax.repeat_circle)),
+                    margin: const EdgeInsets.only(bottom: 3, top: 10),
+                    child: const Icon(Iconsax.repeat_circle),
+                  ),
                   label: 'Riwayat',
                 ),
                 // BottomNavigationBarItem(
@@ -125,29 +145,62 @@ class _MyHomePageState extends State<MyHomePage> {
               onTap: _onItemTapped,
             ),
           )
+        : isInitializeFailed
+        ? Scaffold(
+            body: Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    'Gagal memuat data',
+                    style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.grey.shade800,
+                    ),
+                  ),
+                  const SizedBox(height: 5),
+                  const Text(
+                    'Silakan coba lagi.',
+                    style: TextStyle(color: Colors.grey),
+                  ),
+                  const SizedBox(height: 20),
+                  ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: const Color.fromRGBO(65, 83, 181, 1),
+                    ),
+                    onPressed: _retrySetupDatasets,
+                    child: const Text('Coba Lagi'),
+                  ),
+                ],
+              ),
+            ),
+          )
         : Scaffold(
             body: Center(
-                child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                const CircularProgressIndicator(
-                  color: Color.fromRGBO(65, 83, 181, 1),
-                ),
-                const SizedBox(
-                  height: 20,
-                ),
-                Text('Loading 👾',
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const CircularProgressIndicator(
+                    color: Color.fromRGBO(65, 83, 181, 1),
+                  ),
+                  const SizedBox(height: 20),
+                  Text(
+                    'Loading 👾',
                     style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.grey.shade800)),
-                const SizedBox(
-                  height: 5,
-                ),
-                const Text('Mohon tunggu...',
-                    style: TextStyle(color: Colors.grey)),
-              ],
-            )),
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.grey.shade800,
+                    ),
+                  ),
+                  const SizedBox(height: 5),
+                  const Text(
+                    'Mohon tunggu...',
+                    style: TextStyle(color: Colors.grey),
+                  ),
+                ],
+              ),
+            ),
           );
   }
 }

@@ -46,7 +46,12 @@ class DatabaseInstance {
 
   // only have a single app-wide reference to the database
   static Future<Database>? _database;
-  Future<Database> get database => _database ??= _initDatabase();
+  Future<Database> get database =>
+      _database ??= _initDatabase().catchError((Object e, StackTrace s) {
+        // Don't cache a failed open, so a retry starts from scratch.
+        _database = null;
+        Error.throwWithStackTrace(e, s);
+      });
 
   // this opens the database (and creates it if it doesn't exist)
   Future<Database> _initDatabase() async {
@@ -65,9 +70,18 @@ class DatabaseInstance {
       onUpgrade: _onUpgrade,
       // Unqualified `dictionaries` in the repositories resolves to the
       // attached file, since the main database has no such table.
-      onOpen: (db) =>
-          db.execute('ATTACH DATABASE ? AS dictionary_db', [dictionaryPath]),
+      onOpen: (db) => _attachDictionary(db, dictionaryPath),
     );
+  }
+
+  // sqflite's Android plugin keeps connections open across Flutter engines,
+  // so after the user backs out of the app and reopens it the "new"
+  // connection can be the old one with the dictionary still attached.
+  // Attaching it twice throws and would leave the app stuck on loading.
+  Future<void> _attachDictionary(Database db, String path) async {
+    final attached = await db.rawQuery('PRAGMA database_list');
+    if (attached.any((row) => row['name'] == 'dictionary_db')) return;
+    await db.execute('ATTACH DATABASE ? AS dictionary_db', [path]);
   }
 
   // Copies the bundled dictionary on first launch, and again whenever the

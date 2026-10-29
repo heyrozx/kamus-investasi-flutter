@@ -1,3 +1,11 @@
+## 1.1.2 (14)
+
+* Memperbaiki aplikasi yang tertahan di layar loading terus-menerus setelah keluar dengan tombol
+  back lalu dibuka kembali: koneksi database dari sesi sebelumnya masih aktif dan database kamus
+  sudah ter-attach, sehingga `ATTACH` gagal. Sekarang database kamus hanya di-attach jika belum
+* Jika database gagal dibuka, aplikasi menampilkan pesan "Gagal memuat data" dengan tombol
+  "Coba Lagi" alih-alih loading tanpa akhir
+
 ## 1.1.1 (13)
 
 * Memperbaiki crash saat aplikasi dibuka di build release (`Failed to create an instance of
